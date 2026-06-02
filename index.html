@@ -3,100 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caderno Digital - Engenharia de Software</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Análise de Requisitos</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2C3E50;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+        }
+        h1 {
+            font-size: 2em;
+            border-bottom: 2px solid #D4C5B9;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.6em;
+        }
+        h3 {
+            font-size: 1.3em;
+        }
+        p {
+            margin-bottom: 1em;
+        }
+        ul, ol {
+            margin-bottom: 1em;
+            margin-left: 20px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        code {
+            background-color: #eef;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        pre {
+            background-color: #2C3E50;
+            color: #ECF0F1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1em;
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+    </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <!-- Espiral do Caderno -->
-        <div class="spiral-left"></div>
-        
-        <!-- Área Principal -->
-        <div class="notebook-content">
-            <!-- Cabeçalho -->
-            <header class="notebook-header">
-                <div class="header-content">
-                    <h1 class="title">📚 Caderno Digital</h1>
-                    <p class="subtitle">Atividades de Engenharia de Software</p>
-                </div>
-            </header>
+    <h1>Análise de Requisitos</h1>
+    <p>Esta atividade aborda os conceitos fundamentais e as técnicas de levantamento e análise de requisitos de software, um passo crucial no ciclo de vida do desenvolvimento de sistemas.</p>
 
-            <!-- Visualização de Abas (Lista de Atividades) -->
-            <div id="activities-view" class="activities-view active">
-                <div class="tabs-container">
-                    <div class="tabs-header">
-                        <h2>Minhas Atividades</h2>
-                        <button class="btn-add-activity" onclick="showAddActivityForm()">
-                            <span class="icon">+</span> Nova Atividade
-                        </button>
-                    </div>
-                    
-                    <div class="tabs-grid" id="tabs-grid">
-                        <!-- Abas serão inseridas aqui via JavaScript -->
-                    </div>
-                </div>
-            </div>
+    <h2>O que são Requisitos?</h2>
+    <p>Requisitos são as condições ou capacidades que um sistema deve satisfazer. Eles podem ser funcionais (o que o sistema deve fazer) ou não funcionais (como o sistema deve se comportar, como desempenho, segurança, usabilidade).</p>
 
-            <!-- Visualização de Conteúdo (Atividade Aberta) -->
-            <div id="activity-view" class="activity-view">
-                <div class="activity-header">
-                    <button class="btn-back" onclick="backToActivities()">
-                        <span class="arrow">←</span> Voltar
-                    </button>
-                    <div class="activity-info">
-                        <h2 id="activity-title"></h2>
-                        <p id="activity-meta"></p>
-                    </div>
-                </div>
-                
-                <div class="activity-content" id="activity-content">
-                    <!-- Conteúdo será inserido aqui -->
-                </div>
-            </div>
+    <h2>Técnicas de Levantamento</h2>
+    <ul>
+        <li><strong>Entrevistas:</strong> Conversas diretas com stakeholders para entender suas necessidades.</li>
+        <li><strong>Workshops:</strong> Reuniões colaborativas para elicitar e refinar requisitos em grupo.</li>
+        <li><strong>Questionários:</strong> Coleta de informações de um grande número de usuários.</li>
+        <li><strong>Análise de Documentos:</strong> Estudo de sistemas existentes, manuais e políticas.</li>
+        <li><strong>Prototipagem:</strong> Criação de modelos simplificados do sistema para validação.</li>
+    </ul>
 
-            <!-- Modal para Adicionar Atividade -->
-            <div id="add-activity-modal" class="modal">
-                <div class="modal-content">
-                    <button class="modal-close" onclick="closeAddActivityForm()">&times;</button>
-                    <h3>Nova Atividade</h3>
-                    <form id="add-activity-form" onsubmit="addNewActivity(event)">
-                        <div class="form-group">
-                            <label for="new-title">Título da Atividade</label>
-                            <input type="text" id="new-title" required placeholder="Ex: Análise de Requisitos">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="new-description">Descrição</label>
-                            <textarea id="new-description" required placeholder="Descreva brevemente a atividade"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="new-subject">Disciplina</label>
-                            <input type="text" id="new-subject" required placeholder="Ex: Engenharia de Software">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="new-date">Data</label>
-                            <input type="date" id="new-date" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="new-content-path">Caminho do Arquivo (relativo)</label>
-                            <input type="text" id="new-content-path" required placeholder="Ex: activities/nova-atividade/index.html">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="new-color">Cor da Aba</label>
-                            <input type="color" id="new-color" value="#FF6B6B">
-                        </div>
-                        
-                        <button type="submit" class="btn-submit">Adicionar Atividade</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <h2>Exemplo de Requisito Funcional</h2>
+    <pre><code>RF001: O sistema deve permitir que o usuário cadastre novos produtos, informando nome, descrição, preço e quantidade em estoque.</code></pre>
 
-    <script src="script.js"></script>
+    <h2>Exemplo de Requisito Não Funcional</h2>
+    <pre><code>RNF001: O sistema deve carregar a página inicial em menos de 3 segundos para 90% dos usuários.</code></pre>
+
+    <h2>Ferramentas Comuns</h2>
+    <p>Algumas ferramentas populares para gerenciar requisitos incluem Jira, Azure DevOps, e Trello.</p>
+
+    <h3>Conclusão</h3>
+    <p>Uma análise de requisitos bem-feita é a base para o sucesso de qualquer projeto de software, garantindo que o produto final atenda às expectativas dos usuários e aos objetivos de negócio.</p>
 </body>
 </html>
