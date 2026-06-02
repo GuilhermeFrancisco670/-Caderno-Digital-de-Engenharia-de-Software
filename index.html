@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caderno Digital - Engenharia de Software</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="notebook-container">
+        <!-- Espiral do Caderno -->
+        <div class="spiral-left"></div>
+        
+        <!-- Área Principal -->
+        <div class="notebook-content">
+            <!-- Cabeçalho -->
+            <header class="notebook-header">
+                <div class="header-content">
+                    <h1 class="title">📚 Caderno Digital</h1>
+                    <p class="subtitle">Atividades de Engenharia de Software</p>
+                </div>
+            </header>
+
+            <!-- Visualização de Abas (Lista de Atividades) -->
+            <div id="activities-view" class="activities-view active">
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <h2>Minhas Atividades</h2>
+                        <button class="btn-add-activity" onclick="showAddActivityForm()">
+                            <span class="icon">+</span> Nova Atividade
+                        </button>
+                    </div>
+                    
+                    <div class="tabs-grid" id="tabs-grid">
+                        <!-- Abas serão inseridas aqui via JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualização de Conteúdo (Atividade Aberta) -->
+            <div id="activity-view" class="activity-view">
+                <div class="activity-header">
+                    <button class="btn-back" onclick="backToActivities()">
+                        <span class="arrow">←</span> Voltar
+                    </button>
+                    <div class="activity-info">
+                        <h2 id="activity-title"></h2>
+                        <p id="activity-meta"></p>
+                    </div>
+                </div>
+                
+                <div class="activity-content" id="activity-content">
+                    <!-- Conteúdo será inserido aqui -->
+                </div>
+            </div>
+
+            <!-- Modal para Adicionar Atividade -->
+            <div id="add-activity-modal" class="modal">
+                <div class="modal-content">
+                    <button class="modal-close" onclick="closeAddActivityForm()">&times;</button>
+                    <h3>Nova Atividade</h3>
+                    <form id="add-activity-form" onsubmit="addNewActivity(event)">
+                        <div class="form-group">
+                            <label for="new-title">Título da Atividade</label>
+                            <input type="text" id="new-title" required placeholder="Ex: Análise de Requisitos">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-description">Descrição</label>
+                            <textarea id="new-description" required placeholder="Descreva brevemente a atividade"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-subject">Disciplina</label>
+                            <input type="text" id="new-subject" required placeholder="Ex: Engenharia de Software">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-date">Data</label>
+                            <input type="date" id="new-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-content-path">Caminho do Arquivo (relativo)</label>
+                            <input type="text" id="new-content-path" required placeholder="Ex: activities/nova-atividade/index.html">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-color">Cor da Aba</label>
+                            <input type="color" id="new-color" value="#FF6B6B">
+                        </div>
+                        
+                        <button type="submit" class="btn-submit">Adicionar Atividade</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

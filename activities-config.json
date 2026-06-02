@@ -1,0 +1,31 @@
+{
+  "activities": [
+    {
+      "id": "activity-001",
+      "title": "Análise de Requisitos",
+      "description": "Atividade sobre levantamento e análise de requisitos de software",
+      "subject": "Engenharia de Software",
+      "date": "2026-02-15",
+      "contentPath": "activities/activity-001/index.html",
+      "color": "#FF6B6B"
+    },
+    {
+      "id": "activity-002",
+      "title": "Padrões de Design",
+      "description": "Estudo sobre padrões de design e sua aplicação prática",
+      "subject": "Arquitetura de Software",
+      "date": "2026-02-20",
+      "contentPath": "activities/activity-002/index.html",
+      "color": "#4ECDC4"
+    },
+    {
+      "id": "activity-003",
+      "title": "Testes Unitários",
+      "description": "Implementação de testes unitários com Jest e Vitest",
+      "subject": "Qualidade de Software",
+      "date": "2026-02-25",
+      "contentPath": "activities/activity-003/index.html",
+      "color": "#95E1D3"
+    }
+  ]
+}
