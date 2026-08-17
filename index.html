@@ -914,6 +914,165 @@
       to { opacity: 1; }
     }
 
+    .sync-button {
+      position: relative;
+    }
+
+    .sync-indicator {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--muted);
+      box-shadow: 0 0 0 4px var(--line);
+    }
+
+    .sync-button[data-sync-state="connected"] .sync-indicator {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .sync-button[data-sync-state="syncing"] .sync-indicator {
+      background: var(--warm);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--warm), transparent 80%);
+      animation: sync-pulse 1.2s ease-in-out infinite;
+    }
+
+    .sync-button[data-sync-state="error"] .sync-indicator {
+      background: var(--danger);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger), transparent 80%);
+    }
+
+    @keyframes sync-pulse {
+      50% { opacity: 0.42; transform: scale(0.7); }
+    }
+
+    .sync-panel {
+      width: min(760px, 100%);
+    }
+
+    .sync-panel .modal-heading {
+      margin-bottom: 20px;
+    }
+
+    .sync-intro {
+      max-width: 620px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.65;
+    }
+
+    .sync-status {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-muted);
+    }
+
+    .sync-status-dot {
+      width: 9px;
+      height: 9px;
+      margin-top: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+
+    .sync-status[data-state="connected"] .sync-status-dot {
+      background: var(--accent);
+      box-shadow: 0 0 0 5px var(--accent-soft);
+    }
+
+    .sync-status[data-state="syncing"] .sync-status-dot {
+      background: var(--warm);
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--warm), transparent 80%);
+      animation: sync-pulse 1.2s ease-in-out infinite;
+    }
+
+    .sync-status[data-state="error"] .sync-status-dot {
+      background: var(--danger);
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--danger), transparent 80%);
+    }
+
+    .sync-status-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .sync-status-copy strong {
+      font-size: 0.78rem;
+    }
+
+    .sync-status-copy span,
+    .sync-last-sync {
+      color: var(--muted);
+      font-size: 0.69rem;
+    }
+
+    .sync-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .sync-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    .sync-checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted-strong);
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .sync-checkbox input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent-strong);
+    }
+
+    .sync-security-note {
+      margin: 18px 0 0;
+      padding: 12px 14px;
+      color: var(--muted);
+      border-left: 2px solid var(--warm);
+      background: var(--accent-soft);
+      font-size: 0.69rem;
+      line-height: 1.55;
+    }
+
+    .sync-security-note strong {
+      color: var(--muted-strong);
+    }
+
+    .sync-actions {
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .sync-actions-main {
+      display: flex;
+      gap: 10px;
+    }
+
+    .sync-panel .primary-button[disabled],
+    .sync-panel .ghost-button[disabled] {
+      cursor: wait;
+      opacity: 0.62;
+      transform: none;
+    }
+
     .modal-card {
       width: min(680px, 100%);
       max-height: min(780px, calc(100vh - 48px));
@@ -1128,6 +1287,10 @@
         display: none;
       }
 
+      .topbar-actions .sync-button {
+        display: inline-flex;
+      }
+
       .page {
         padding-top: 38px;
       }
@@ -1177,7 +1340,8 @@
         padding: 0;
       }
 
-      .theme-toggle .theme-label {
+      .theme-toggle .theme-label,
+      .sync-button .sync-label {
         display: none;
       }
 
@@ -1207,12 +1371,27 @@
         width: 100%;
       }
 
-      .form-grid {
+      .form-grid,
+      .sync-grid {
         grid-template-columns: 1fr;
       }
 
-      .form-group.full {
+      .form-group.full,
+      .sync-grid .full {
         grid-column: auto;
+      }
+
+      .sync-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .sync-actions-main {
+        justify-content: stretch;
+      }
+
+      .sync-actions-main > * {
+        flex: 1;
       }
 
       .modal-backdrop {
@@ -1263,6 +1442,10 @@
           Importar
         </label>
         <input class="sr-only" id="importInput" type="file" accept="application/json,.json">
+        <button class="ghost-button sync-button" id="syncButton" type="button" data-sync-state="idle" title="Configurar sincronização com o GitHub">
+          <span class="sync-indicator" aria-hidden="true"></span>
+          <span class="sync-label">Sync GitHub</span>
+        </button>
         <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="true" title="Alternar entre tema claro e escuro">
           <span class="theme-icon" aria-hidden="true">☼</span>
           <span class="theme-label">Tema claro</span>
@@ -1429,6 +1612,74 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="syncBackdrop" hidden>
+    <section class="modal-card sync-panel" role="dialog" aria-modal="true" aria-labelledby="syncModalTitle" aria-describedby="syncModalDescription">
+      <div class="modal-heading">
+        <div>
+          <p class="eyebrow">Cloud page // GitHub</p>
+          <h2 id="syncModalTitle">Sincronizar caderno</h2>
+          <p class="sync-intro" id="syncModalDescription">Envie suas atividades para o arquivo JSON do seu repositório. O GitHub permanece como sua fonte versionada de backup.</p>
+        </div>
+        <button class="icon-button" id="closeSyncButton" type="button" aria-label="Fechar configurações de sincronização">×</button>
+      </div>
+
+      <div class="sync-status" id="syncStatus" data-state="idle" role="status" aria-live="polite">
+        <span class="sync-status-dot" aria-hidden="true"></span>
+        <div class="sync-status-copy">
+          <strong id="syncStatusTitle">Sincronização ainda não configurada</strong>
+          <span id="syncStatusDescription">Informe um token de acesso e o destino do arquivo para começar.</span>
+        </div>
+      </div>
+
+      <form id="syncForm" novalidate>
+        <div class="sync-grid">
+          <div class="form-group full">
+            <label class="field-label" for="githubTokenInput">Token fine-grained do GitHub <span class="required-mark">*</span></label>
+            <input class="form-field" id="githubTokenInput" name="githubToken" type="password" autocomplete="off" placeholder="github_pat_..." required>
+            <p class="form-hint">Use uma permissão mínima de conteúdo do repositório. O token nunca é incluído no arquivo JSON.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="field-label" for="githubOwnerInput">Proprietário / usuário <span class="required-mark">*</span></label>
+            <input class="form-field" id="githubOwnerInput" name="githubOwner" type="text" value="GuilhermeFrancisco670" required>
+          </div>
+
+          <div class="form-group">
+            <label class="field-label" for="githubRepositoryInput">Repositório <span class="required-mark">*</span></label>
+            <input class="form-field" id="githubRepositoryInput" name="githubRepository" type="text" value="-Caderno-Digital-de-Engenharia-de-Software" required>
+          </div>
+
+          <div class="form-group">
+            <label class="field-label" for="githubBranchInput">Branch</label>
+            <input class="form-field" id="githubBranchInput" name="githubBranch" type="text" value="main">
+          </div>
+
+          <div class="form-group">
+            <label class="field-label" for="githubPathInput">Arquivo de destino</label>
+            <input class="form-field" id="githubPathInput" name="githubPath" type="text" value="activities-config.json">
+          </div>
+
+          <div class="form-group full">
+            <label class="sync-checkbox" for="rememberTokenInput">
+              <input id="rememberTokenInput" name="rememberToken" type="checkbox">
+              Lembrar o token neste navegador para sincronizações futuras
+            </label>
+          </div>
+        </div>
+
+        <p class="sync-security-note"><strong>Nota de segurança:</strong> a página fala diretamente com <span class="mono">api.github.com</span>. O token fica no navegador e é enviado somente ao GitHub. Não use este recurso em computadores compartilhados; para maior proteção, mantenha a opção de lembrar desmarcada.</p>
+
+        <div class="sync-actions">
+          <button class="ghost-button" id="clearGithubConfigButton" type="button">Limpar configuração</button>
+          <div class="sync-actions-main">
+            <button class="ghost-button" id="cancelSyncButton" type="button">Cancelar</button>
+            <button class="primary-button" id="syncNowButton" type="submit"><span aria-hidden="true">↥</span> Salvar e sincronizar</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -1437,6 +1688,17 @@
 
       const STORAGE_KEY = "caderno-digital-activities-v2";
       const THEME_KEY = "caderno-digital-theme";
+      const SYNC_CONFIG_KEY = "caderno-digital-github-sync-v1";
+      const SYNC_TOKEN_KEY = "caderno-digital-github-token-v1";
+      const SYNC_SESSION_TOKEN_KEY = "caderno-digital-github-token-session-v1";
+      const GITHUB_API_BASE = "https://api.github.com";
+      const DEFAULT_SYNC_CONFIG = {
+        owner: "GuilhermeFrancisco670",
+        repository: "-Caderno-Digital-de-Engenharia-de-Software",
+        branch: "main",
+        path: "activities-config.json",
+        lastSyncAt: ""
+      };
       const LANGUAGE_LABELS = {
         html: "HTML",
         css: "CSS",
@@ -1495,6 +1757,22 @@
         newActivityButton: document.querySelector("#newActivityButton"),
         exportButton: document.querySelector("#exportButton"),
         importInput: document.querySelector("#importInput"),
+        syncButton: document.querySelector("#syncButton"),
+        syncBackdrop: document.querySelector("#syncBackdrop"),
+        closeSyncButton: document.querySelector("#closeSyncButton"),
+        cancelSyncButton: document.querySelector("#cancelSyncButton"),
+        syncForm: document.querySelector("#syncForm"),
+        githubTokenInput: document.querySelector("#githubTokenInput"),
+        githubOwnerInput: document.querySelector("#githubOwnerInput"),
+        githubRepositoryInput: document.querySelector("#githubRepositoryInput"),
+        githubBranchInput: document.querySelector("#githubBranchInput"),
+        githubPathInput: document.querySelector("#githubPathInput"),
+        rememberTokenInput: document.querySelector("#rememberTokenInput"),
+        syncStatus: document.querySelector("#syncStatus"),
+        syncStatusTitle: document.querySelector("#syncStatusTitle"),
+        syncStatusDescription: document.querySelector("#syncStatusDescription"),
+        syncNowButton: document.querySelector("#syncNowButton"),
+        clearGithubConfigButton: document.querySelector("#clearGithubConfigButton"),
         themeToggle: document.querySelector("#themeToggle"),
         modalBackdrop: document.querySelector("#modalBackdrop"),
         modalTitle: document.querySelector("#modalTitle"),
@@ -1514,12 +1792,248 @@
       let editingId = null;
       let toastTimer = null;
       let lastFocusedElement = null;
+      let lastSyncFocusedElement = null;
+      let syncConfig = readSyncConfig();
+      let syncBusy = false;
 
       function createId() {
         if (window.crypto && typeof window.crypto.randomUUID === "function") {
           return window.crypto.randomUUID();
         }
         return `activity-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      }
+
+      function readSyncConfig() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(SYNC_CONFIG_KEY) || "null");
+          if (!stored || typeof stored !== "object") return { ...DEFAULT_SYNC_CONFIG };
+          return {
+            owner: typeof stored.owner === "string" && stored.owner.trim() ? stored.owner.trim() : DEFAULT_SYNC_CONFIG.owner,
+            repository: typeof stored.repository === "string" && stored.repository.trim() ? stored.repository.trim() : DEFAULT_SYNC_CONFIG.repository,
+            branch: typeof stored.branch === "string" && stored.branch.trim() ? stored.branch.trim() : DEFAULT_SYNC_CONFIG.branch,
+            path: typeof stored.path === "string" && stored.path.trim() ? stored.path.trim() : DEFAULT_SYNC_CONFIG.path,
+            lastSyncAt: typeof stored.lastSyncAt === "string" ? stored.lastSyncAt : ""
+          };
+        } catch (error) {
+          return { ...DEFAULT_SYNC_CONFIG };
+        }
+      }
+
+      function readSyncToken() {
+        try {
+          return sessionStorage.getItem(SYNC_SESSION_TOKEN_KEY) || localStorage.getItem(SYNC_TOKEN_KEY) || "";
+        } catch (error) {
+          return "";
+        }
+      }
+
+      function saveSyncConfiguration(config, token, rememberToken) {
+        const safeConfig = {
+          owner: config.owner,
+          repository: config.repository,
+          branch: config.branch || DEFAULT_SYNC_CONFIG.branch,
+          path: config.path || DEFAULT_SYNC_CONFIG.path,
+          lastSyncAt: config.lastSyncAt || ""
+        };
+        syncConfig = safeConfig;
+        try {
+          localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(safeConfig));
+          localStorage.removeItem(SYNC_TOKEN_KEY);
+          sessionStorage.removeItem(SYNC_SESSION_TOKEN_KEY);
+          if (rememberToken) {
+            localStorage.setItem(SYNC_TOKEN_KEY, token);
+          } else {
+            sessionStorage.setItem(SYNC_SESSION_TOKEN_KEY, token);
+          }
+          return true;
+        } catch (error) {
+          showToast("Não foi possível salvar a configuração neste navegador.", "error");
+          return false;
+        }
+      }
+
+      function clearSyncConfiguration() {
+        try {
+          localStorage.removeItem(SYNC_CONFIG_KEY);
+          localStorage.removeItem(SYNC_TOKEN_KEY);
+          sessionStorage.removeItem(SYNC_SESSION_TOKEN_KEY);
+        } catch (error) {
+          // A remoção segue sendo refletida na interface mesmo se o storage estiver indisponível.
+        }
+        syncConfig = { ...DEFAULT_SYNC_CONFIG };
+        elements.githubOwnerInput.value = DEFAULT_SYNC_CONFIG.owner;
+        elements.githubRepositoryInput.value = DEFAULT_SYNC_CONFIG.repository;
+        elements.githubBranchInput.value = DEFAULT_SYNC_CONFIG.branch;
+        elements.githubPathInput.value = DEFAULT_SYNC_CONFIG.path;
+        elements.githubTokenInput.value = "";
+        elements.rememberTokenInput.checked = false;
+        setSyncStatus("idle", "Sincronização ainda não configurada", "Informe um token de acesso e o destino do arquivo para começar.");
+        elements.syncButton.dataset.syncState = "idle";
+        showToast("Configuração do GitHub removida deste navegador.");
+      }
+
+      function setSyncStatus(state, title, description) {
+        elements.syncStatus.dataset.state = state;
+        elements.syncStatusTitle.textContent = title;
+        elements.syncStatusDescription.textContent = description;
+        elements.syncButton.dataset.syncState = state;
+      }
+
+      function formatSyncDate(value) {
+        if (!value) return "";
+        try {
+          return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
+        } catch (error) {
+          return value;
+        }
+      }
+
+      function populateSyncForm() {
+        elements.githubOwnerInput.value = syncConfig.owner;
+        elements.githubRepositoryInput.value = syncConfig.repository;
+        elements.githubBranchInput.value = syncConfig.branch;
+        elements.githubPathInput.value = syncConfig.path;
+        elements.githubTokenInput.value = readSyncToken();
+        try {
+          elements.rememberTokenInput.checked = Boolean(localStorage.getItem(SYNC_TOKEN_KEY));
+        } catch (error) {
+          elements.rememberTokenInput.checked = false;
+        }
+
+        if (syncConfig.lastSyncAt) {
+          setSyncStatus(
+            "connected",
+            "Caderno conectado ao GitHub",
+            `Última sincronização: ${formatSyncDate(syncConfig.lastSyncAt)}.`
+          );
+        } else if (readSyncToken()) {
+          setSyncStatus("idle", "Configuração pronta", "Clique em “Salvar e sincronizar” para enviar suas atividades.");
+        } else {
+          setSyncStatus("idle", "Sincronização ainda não configurada", "Informe um token de acesso e o destino do arquivo para começar.");
+        }
+      }
+
+      function openSyncPanel() {
+        if (syncBusy) return;
+        populateSyncForm();
+        lastSyncFocusedElement = document.activeElement;
+        elements.syncBackdrop.hidden = false;
+        document.body.style.overflow = "hidden";
+        window.setTimeout(() => elements.githubTokenInput.focus(), 40);
+      }
+
+      function closeSyncPanel() {
+        if (syncBusy) return;
+        elements.syncBackdrop.hidden = true;
+        document.body.style.overflow = "";
+        if (lastSyncFocusedElement && typeof lastSyncFocusedElement.focus === "function") lastSyncFocusedElement.focus();
+      }
+
+      function getSyncFormData() {
+        const token = elements.githubTokenInput.value.trim();
+        const config = {
+          owner: elements.githubOwnerInput.value.trim(),
+          repository: elements.githubRepositoryInput.value.trim(),
+          branch: elements.githubBranchInput.value.trim() || DEFAULT_SYNC_CONFIG.branch,
+          path: elements.githubPathInput.value.trim().replace(/^\/+/, "") || DEFAULT_SYNC_CONFIG.path
+        };
+        const pathParts = config.path.split("/");
+        if (!token || !config.owner || !config.repository || !config.branch || !config.path || pathParts.includes("..")) {
+          return null;
+        }
+        return { config, token, rememberToken: elements.rememberTokenInput.checked };
+      }
+
+      function encodeGitHubPath(path) {
+        return path.split("/").filter(Boolean).map((part) => encodeURIComponent(part)).join("/");
+      }
+
+      function encodeBase64Utf8(value) {
+        const bytes = new TextEncoder().encode(value);
+        let binary = "";
+        bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+        return btoa(binary);
+      }
+
+      async function githubRequest(url, options, token) {
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            Accept: "application/vnd.github+json",
+            Authorization: `Bearer ${token}`,
+            "X-GitHub-Api-Version": "2022-11-28",
+            ...(options && options.headers ? options.headers : {})
+          }
+        });
+        if (!response.ok) {
+          let message = `GitHub respondeu com HTTP ${response.status}.`;
+          try {
+            const payload = await response.json();
+            if (payload && payload.message) message = payload.message;
+          } catch (error) {
+            // Mantém a mensagem baseada no status quando a resposta não for JSON.
+          }
+          const requestError = new Error(message);
+          requestError.status = response.status;
+          throw requestError;
+        }
+        return response.status === 204 ? null : response.json();
+      }
+
+      async function getGitHubFile(config, token) {
+        const url = `${GITHUB_API_BASE}/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repository)}/contents/${encodeGitHubPath(config.path)}?ref=${encodeURIComponent(config.branch)}`;
+        try {
+          return await githubRequest(url, { method: "GET" }, token);
+        } catch (error) {
+          if (error.status === 404) return null;
+          throw error;
+        }
+      }
+
+      function getSyncErrorMessage(error) {
+        if (error && error.status === 401) return "Token inválido ou expirado. Gere outro token fine-grained no GitHub.";
+        if (error && error.status === 403) return "O GitHub recusou a operação. Confira a permissão Contents: Read and write do token.";
+        if (error && error.status === 404) return "Repositório, branch ou caminho não encontrado. Revise os campos de destino.";
+        if (error && error.status === 409) return "O arquivo mudou no GitHub durante a operação. Tente sincronizar novamente.";
+        if (error instanceof TypeError) return "Não foi possível alcançar a API do GitHub. Verifique sua conexão.";
+        return error && error.message ? error.message : "Não foi possível sincronizar agora.";
+      }
+
+      async function syncActivitiesToGitHub(formData) {
+        if (syncBusy) return;
+        syncBusy = true;
+        elements.syncNowButton.disabled = true;
+        elements.clearGithubConfigButton.disabled = true;
+        elements.syncButton.dataset.syncState = "syncing";
+        setSyncStatus("syncing", "Sincronizando com o GitHub...", "Lendo a versão atual e preparando um novo commit.");
+
+        try {
+          const remoteFile = await getGitHubFile(formData.config, formData.token);
+          const exportedAt = new Date().toISOString();
+          const payload = JSON.stringify({ version: 2, exportedAt, activities }, null, 2);
+          const body = {
+            message: `sync: atualizar caderno digital (${exportedAt.slice(0, 10)})`,
+            content: encodeBase64Utf8(payload),
+            branch: formData.config.branch
+          };
+          if (remoteFile && remoteFile.sha) body.sha = remoteFile.sha;
+
+          const url = `${GITHUB_API_BASE}/repos/${encodeURIComponent(formData.config.owner)}/${encodeURIComponent(formData.config.repository)}/contents/${encodeGitHubPath(formData.config.path)}`;
+          await githubRequest(url, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }, formData.token);
+
+          const lastSyncAt = new Date().toISOString();
+          saveSyncConfiguration({ ...formData.config, lastSyncAt }, formData.token, formData.rememberToken);
+          setSyncStatus("connected", "Caderno conectado ao GitHub", `Arquivo atualizado em ${formatSyncDate(lastSyncAt)}.`);
+          showToast("Caderno sincronizado com o GitHub.");
+        } catch (error) {
+          const message = getSyncErrorMessage(error);
+          setSyncStatus("error", "Falha na sincronização", message);
+          showToast(message, "error");
+        } finally {
+          syncBusy = false;
+          elements.syncNowButton.disabled = false;
+          elements.clearGithubConfigButton.disabled = false;
+        }
       }
 
       function escapeHtml(value) {
@@ -1921,13 +2435,36 @@
       elements.themeToggle.addEventListener("click", () => {
         applyTheme(elements.root.dataset.theme === "light" ? "dark" : "light", true);
       });
+      elements.syncButton.addEventListener("click", openSyncPanel);
+      elements.closeSyncButton.addEventListener("click", closeSyncPanel);
+      elements.cancelSyncButton.addEventListener("click", closeSyncPanel);
+      elements.syncForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = getSyncFormData();
+        if (!formData) {
+          setSyncStatus("error", "Dados incompletos", "Preencha o token, proprietário, repositório e um caminho de arquivo válido.");
+          showToast("Confira os campos obrigatórios da sincronização.", "error");
+          elements.githubTokenInput.focus();
+          return;
+        }
+        syncActivitiesToGitHub(formData);
+      });
+      elements.clearGithubConfigButton.addEventListener("click", () => {
+        if (syncBusy) return;
+        if (window.confirm("Limpar o token e as configurações do GitHub deste navegador?")) clearSyncConfiguration();
+      });
 
       elements.modalBackdrop.addEventListener("click", (event) => {
         if (event.target === elements.modalBackdrop) closeModal();
       });
+      elements.syncBackdrop.addEventListener("click", (event) => {
+        if (event.target === elements.syncBackdrop) closeSyncPanel();
+      });
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !elements.modalBackdrop.hidden) closeModal();
+        if (event.key !== "Escape") return;
+        if (!elements.modalBackdrop.hidden) closeModal();
+        if (!elements.syncBackdrop.hidden) closeSyncPanel();
       });
 
       elements.activitiesGrid.addEventListener("click", (event) => {
