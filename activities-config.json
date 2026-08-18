@@ -1,6 +1,25 @@
 {
   "version": 2,
+  "exportedAt": "2026-08-18T03:01:12.321Z",
   "activities": [
+    {
+      "id": "5ab11b37-8e38-4f35-8ba9-36df4cf9bc52",
+      "title": "Aula 5: Construindo Objetos a prova de falhas",
+      "description": "Apreendemos a criar um objeto construtor e a usar a palavra this.",
+      "subject": "PROGRAMAÇÃO ORIENTADA A OBJETOS",
+      "date": "2026-08-10",
+      "code": "// main.java\n\npackage br.edu.unicesumar;\n\npublic class Main {\n    static void main() {\n\n\n        Veiculo uno = new Veiculo(\"Fiat\", \"Uno\", 2009);\n        uno.quantPortas=4;\n        uno.exibirDados();\n\n        Veiculo fusca = new Veiculo(\"VW\",\"Fusca 1300\",1976);\n        fusca.exibirDados();\n    }\n}\n\n----------------------------------------------------------------------------\n\n//Veiculo.java\n\npackage br.edu.unicesumar;\n\nimport java.lang.classfile.attribute.SourceFileAttribute;\n\npublic class Veiculo {\n    public String marca;\n    public String modelo;\n    public int anoFabricacao;\n    public int quantPortas;\n\n    public Veiculo(String marca, String modelo, int anoFabricacao){\n        this.marca = marca;\n        this.modelo = modelo;\n        this.anoFabricacao = anoFabricacao;\n        this.quantPortas = 2;\n    }\n\n    public void exibirDados(){\n        System.out.printf(\"Veículo\\n\");\n        System.out.printf(\"Marca: %s - Modelo: %s - Ano: %d\\n\", marca, modelo, anoFabricacao);\n    }\n\n}",
+      "language": "java"
+    },
+    {
+      "id": "3da983c8-db84-45ee-9d1f-3df6a8a9fd3c",
+      "title": "Exercício 1. Criando Getters e Setters Simples",
+      "description": "Exercício 1 da Lista de 10 Exercícios – Encapsulamento em Java",
+      "subject": "PROGRAMAÇÃO ORIENTADA A OBJETOS",
+      "date": "2026-08-17",
+      "code": "// Exercício 1: Criando Getters e Setters Simples \n//• Criar uma classe Pessoa com os atributos private String nome e private int idade.\n\n//• Criar métodos getNome(), setNome(String nome), getIdade() e setIdade(int idade).\n\n//• No método main, instanciar um objeto, definir valores e exibi-los utilizando os getters.\n\n\npublic class Exercicio1 {\n    public static void main(String[] args) {\n        pessoaEx1 pessoa = new pessoaEx1();\n        pessoa.setNome(\"Guilherme\");\n        pessoa.setIdade(22 );\n\n        System.out.printf(\"Exercício 1: Criando Getters e Setters Simples: \\n  \");\n        System.out.printf(\"O Nome é: %s \\n\", pessoa.getNome());\n        System.out.printf(\"A Idade é: %d \\n\", pessoa.getIdade());\n    }\n}\n\n-----------------------------------------------------------------------------\n\n// Exercício 1: Criando Getters e Setters Simples \n//• Criar uma classe Pessoa com os atributos private String nome e private int idade.\n\n//• Criar métodos getNome(), setNome(String nome), getIdade() e setIdade(int idade).\n\n//• No método main, instanciar um objeto, definir valores e exibi-los utilizando os getters.\n\n\nclass pessoaEx1 {\n    private String nome;\n    private int idade;\n\n    // Getter para nome\n    public String getNome() {\n        return nome;\n    }\n\n    // Setter para nome\n    public void setNome(String nome) {\n        this.nome = nome;\n    }\n\n    // Getter para idade\n    public int getIdade() {\n        return idade;\n    }\n\n    // Setter para idade\n    public void setIdade(int idade) {\n        this.idade = idade;\n    }\n}",
+      "language": "java"
+    },
     {
       "id": "activity-001",
       "title": "Análise de Requisitos",
@@ -25,7 +44,7 @@
       "description": "Implementação de testes unitários com Jest e Vitest.",
       "subject": "Qualidade de Software",
       "date": "2026-02-25",
-      "code": "describe('soma', () => {\n  it('retorna o total esperado', () => {\n    expect(1 + 1).toBe(2);\n  });\n});",
+      "code": "",
       "language": "javascript"
     }
   ]
